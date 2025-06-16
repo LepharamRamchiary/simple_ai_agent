@@ -1,4 +1,4 @@
-import brcypt from "bcrypt";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { inngest } from "../inngest/client.js";
@@ -8,13 +8,13 @@ dotenv.config();
 export const signup = async (req, res) => {
   const { email, password, skills = [] } = req.body;
   try {
-    const hashed = brcypt.hash(password, 8);
+    const hashed = await bcrypt.hash(password, 8);
     const user = await User.create({ email, password: hashed, skills });
 
     // Fire inngest event
     await inngest.send({
       name: "user/signup",
-      date: { email },
+      data: { email },
     });
 
     const token = jwt.sign(
@@ -31,10 +31,12 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = User.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    const isMatch = await brcypt.compare(password, user.password);
+    console.log("Request password:", req.body.password);
+    console.log("User password from DB:", user?.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -95,16 +97,19 @@ export const updateUser = async (req, res) => {
   }
 };
 
-
 export const getUsers = async (req, res) => {
-    try {
-        if(req.user?.role !== "admin") {
-            return res.status(403).json({ error: "Forbidden: Only admins can view all users" });
-        }
-        const users = await User.find().select("-password");
-        return res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: "Failed to fetch users", details: error.message });
-        
+  try {
+    // console.log("Authenticated user:", req.user.role);
+    if (req.user?.role !== "admin") {
+      return res
+        .status(403)
+        .json({ error: "Forbidden: Only admins can view all users" });
     }
-}
+    const users = await User.find().select("-password");
+    return res.json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to fetch users", details: error.message });
+  }
+};

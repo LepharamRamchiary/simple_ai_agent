@@ -1,5 +1,5 @@
 import { inngest } from "../inngest/client.js";
-import Ticket from "../../models/ticket.model.js";
+import Ticket  from "../models/ticket.model.js";
 
 export const createTicket = async (req, res) => {
   const { title, description } = req.body;
@@ -19,7 +19,7 @@ export const createTicket = async (req, res) => {
     await inngest.send({
       name: "ticket/created",
       data: {
-        ticketId: await newTicket._id.toString(),
+        ticketId: (await newTicket)._id.toString(),
         title,
         description,
         createdBy: req.user._id.toString(),

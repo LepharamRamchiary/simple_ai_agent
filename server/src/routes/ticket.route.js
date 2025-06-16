@@ -3,7 +3,7 @@ import {
   createTicket,
   getTickets,
   getTicket,
-} from "../controllers/ticket.controllers.js";
+} from "../controllers/ticket.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
