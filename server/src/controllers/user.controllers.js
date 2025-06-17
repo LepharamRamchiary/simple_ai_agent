@@ -22,9 +22,11 @@ export const signup = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    res.json({ user, token });
+    return res.json({ user, token });
   } catch (error) {
-    res.status(500).json({ error: "SignUp failed", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "SignUp failed", details: error.message });
   }
 };
 
@@ -47,9 +49,11 @@ export const login = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    res.json({ user, token });
+    return res.json({ user, token });
   } catch (error) {
-    res.status(500).json({ error: "Login failed", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Login failed", details: error.message });
   }
 };
 
@@ -65,9 +69,11 @@ export const logout = async (req, res) => {
         return res.status(401).json({ error: "Invalid token" });
       }
     });
-    res.status(200).json({ message: "Logged out successfully" });
+    return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Logout failed", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Logout failed", details: error.message });
   }
 };
 
@@ -93,7 +99,9 @@ export const updateUser = async (req, res) => {
 
     return res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Update failed", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Update failed", details: error.message });
   }
 };
 
@@ -108,7 +116,7 @@ export const getUsers = async (req, res) => {
     const users = await User.find().select("-password");
     return res.json(users);
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ error: "Failed to fetch users", details: error.message });
   }
