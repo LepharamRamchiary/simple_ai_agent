@@ -18,7 +18,7 @@ app.use("/api/auth", userRouters);
 app.use("/api/tickets", ticketRouters);
 
 app.use(
-  "api/inngest",
+  "/api/inngest",
   serve({
     client: inngest,
     functions: [onTicketCreate, onUserSignup],

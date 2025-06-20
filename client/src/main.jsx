@@ -6,19 +6,19 @@ import CheckAuth from "./components/check-auth.jsx";
 import Signup from "./pages/signup.jsx";
 import Login from "./pages/login.jsx";
 import Tickets from "./pages/tickets.jsx";
-import TicketDetailsPage from "./pages/ticketDetail.jsx";
+import TicketDetails from "./pages/ticketDetail.jsx";
 import Admin from "./pages/admin.jsx";
 import Navbar from "./components/navbar.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <Navbar />
       <Routes>
         <Route
           path="/"
           element={
-            <CheckAuth protected={true}>
+            <CheckAuth protectedRouter={true}>
               <Tickets />
             </CheckAuth>
           }
@@ -27,8 +27,8 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/tickets/:id"
           element={
-            <CheckAuth protected={true}>
-              <TicketDetailsPage />
+            <CheckAuth protectedRouter={true}>
+              <TicketDetails />
             </CheckAuth>
           }
         />
@@ -36,7 +36,7 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/login"
           element={
-            <CheckAuth protected={false}>
+            <CheckAuth protectedRouter={false}>
               <Login />
             </CheckAuth>
           }
@@ -45,7 +45,7 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/sign-up"
           element={
-            <CheckAuth protected={false}>
+            <CheckAuth protectedRouter={false}>
               <Signup />
             </CheckAuth>
           }
@@ -54,12 +54,12 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/admin"
           element={
-            <CheckAuth protected={true}>
+            <CheckAuth protectedRouter={true}>
               <Admin />
             </CheckAuth>
           }
         />
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  // </StrictMode>
 );
